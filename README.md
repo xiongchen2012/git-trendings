@@ -1,0 +1,2 @@
+# git-trendings
+用jsoup拉取Github的trending，组织成JSON形式的API，然后每天Commit到自己建的另外一个Repository；
