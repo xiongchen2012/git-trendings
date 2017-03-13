@@ -11,4 +11,5 @@ public class ResultVO<T> {
     @Getter @Setter private String message;
     @Getter @Setter private String devloperMessage;
     @Getter @Setter private T data;
+    @Getter @Setter private int count;
 }

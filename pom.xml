@@ -8,7 +8,7 @@
     <artifactId>git-trendings</artifactId>
     <version>0.1</version>
     <properties>
-        <springboot.version>1.5.2.RELEASE</springboot.version>
+        <springboot.version>1.5.1.RELEASE</springboot.version>
         <spring.version>4.3.7.RELEASE</spring.version>
         <jsoup.version>1.10.2</jsoup.version>
         <guava.version>21.0</guava.version>

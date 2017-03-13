@@ -24,7 +24,6 @@ public class Application {
   protected HttpMessageConverters fastJsonHttpMessageConverter() {
     FastJsonHttpMessageConverter4 fastConverter = new FastJsonHttpMessageConverter4();
     FastJsonConfig fastJsonConfig = new FastJsonConfig();
-    fastJsonConfig.setSerializerFeatures(SerializerFeature.PrettyFormat);
     fastJsonConfig.setSerializerFeatures(SerializerFeature.QuoteFieldNames);
     fastConverter.setFastJsonConfig(fastJsonConfig);
     return new HttpMessageConverters(fastConverter);

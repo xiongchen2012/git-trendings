@@ -38,6 +38,7 @@ public class TrendingController {
     List<Repository> trendings = trendingService.scrapeGithubTrendings(since, language);
     result.setStatus(0);
     result.setData(trendings);
+    result.setCount(trendings.size());
     return result;
   }
 }
