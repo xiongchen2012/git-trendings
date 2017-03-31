@@ -108,32 +108,36 @@ public class TrendingCommand extends HystrixObservableCommand<List<Repository>> 
 
             /* parse stars total */
             int totalStars = 0;
+
+            /* deprecated since 2017/03/31
+            String strStars = repo.select("a.tooltipped[aria-label=Stargazers]").text();
+            */
+            String strStars = repo.select("a.muted-link[href$=stargazers]").text();
             try {
-              totalStars =
-                  NumberFormat.getInstance()
-                      .parse(repo.select("a.tooltipped[aria-label=Stargazers]").text())
-                      .intValue();
+              totalStars = NumberFormat.getInstance().parse(strStars).intValue();
             } catch (ParseException e) {
-              logger.error(title + " parse total stars error:" + e.getMessage());
+              logger.error(
+                  title + " parse total stars error:" + e.getMessage() + " strStars=" + strStars);
             }
 
             /* parse forks */
             int forks = 0;
+            /* deprecated since 2017/03/31
+            String forksStr = repo.select("a.tooltipped[aria-label=Forks]").text();
+            */
+            String forksStr = repo.select("a.muted-link[href$=network]").text();
             try {
-              forks =
-                  NumberFormat.getInstance()
-                      .parse(repo.select("a.tooltipped[aria-label=Forks]").text())
-                      .intValue();
+              forks = NumberFormat.getInstance().parse(forksStr).intValue();
             } catch (ParseException e) {
-              logger.error(title + " parse total stars error:" + e.getMessage());
+              logger.error(
+                  title + " parse total stars error:" + e.getMessage() + " forksStr=" + forksStr);
             }
 
             /* parse contributor list */
             List<String> contributors = Lists.newArrayList();
             Elements conItem = repo.select("a.no-underline img.avatar");
             if (conItem != null && conItem.size() > 0) {
-              conItem.forEach(
-                  contributor -> contributors.add(contributor.attr("title")));
+              conItem.forEach(contributor -> contributors.add(contributor.attr("title")));
             }
 
             /* parse delta */
