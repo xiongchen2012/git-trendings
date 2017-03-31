@@ -108,29 +108,26 @@ public class TrendingCommand extends HystrixObservableCommand<List<Repository>> 
 
             /* parse stars total */
             int totalStars = 0;
-
-            /* deprecated since 2017/03/31
-            String strStars = repo.select("a.tooltipped[aria-label=Stargazers]").text();
-            */
-            String strStars = repo.select("a.muted-link[href$=stargazers]").text();
-            try {
-              totalStars = NumberFormat.getInstance().parse(strStars).intValue();
-            } catch (ParseException e) {
-              logger.error(
-                  title + " parse total stars error:" + e.getMessage() + " strStars=" + strStars);
-            }
-
             /* parse forks */
             int forks = 0;
-            /* deprecated since 2017/03/31
-            String forksStr = repo.select("a.tooltipped[aria-label=Forks]").text();
-            */
+
+            /* deprecated since 2017/03/31 */
+            // String strStars = repo.select("a.tooltipped[aria-label=Stargazers]").text();
+            // String forksStr = repo.select("a.tooltipped[aria-label=Forks]").text();
+
+            String strStars = repo.select("a.muted-link[href$=stargazers]").text();
             String forksStr = repo.select("a.muted-link[href$=network]").text();
             try {
+              /* 2,017(string) -> 2017(number) */
+              totalStars = NumberFormat.getInstance().parse(strStars).intValue();
               forks = NumberFormat.getInstance().parse(forksStr).intValue();
             } catch (ParseException e) {
               logger.error(
-                  title + " parse total stars error:" + e.getMessage() + " forksStr=" + forksStr);
+                  "repository:[{}] parse stars/forks error:{}(stars={},forks={})",
+                  title,
+                  e.getMessage(),
+                  strStars,
+                  forksStr);
             }
 
             /* parse contributor list */
