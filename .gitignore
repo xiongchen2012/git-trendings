@@ -67,3 +67,5 @@ crashlytics.properties
 crashlytics-build.properties
 fabric.properties
 
+.idea/
+git-trendings.iml
