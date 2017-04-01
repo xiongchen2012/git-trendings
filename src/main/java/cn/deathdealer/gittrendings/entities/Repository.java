@@ -47,10 +47,10 @@ public class Repository {
   @Setter
   @Getter
   @JSONField(name="contributors",ordinal = 7)
-  private List<String> contributors;
+  private List<String> contributors; //贡献者列表
 
   @Setter
   @Getter
   @JSONField(name = "delta",ordinal = 8)
-  private String delta;
+  private String delta; //动态信息，如本日获得多少Star，本周获得多少Star,本月获得多少Star
 }

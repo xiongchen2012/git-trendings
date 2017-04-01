@@ -46,8 +46,8 @@ public class TrendingController {
     result.setElapsed(elapsed);
     result.setMessage(
         MessageFormat.format(
-            "parse github trending(since={0},language={1}) successfully in {2}",
-            since, language, elapsed));
+            "parse github trending(since={0},language={1}) successfully.",
+            since, language));
     return result;
   }
 }
