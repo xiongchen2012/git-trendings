@@ -69,3 +69,4 @@ fabric.properties
 
 .idea/
 git-trendings.iml
+target/

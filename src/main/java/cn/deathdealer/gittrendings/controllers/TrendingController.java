@@ -3,13 +3,16 @@ package cn.deathdealer.gittrendings.controllers;
 import cn.deathdealer.gittrendings.entities.Repository;
 import cn.deathdealer.gittrendings.entities.ResultVO;
 import cn.deathdealer.gittrendings.services.TrendingService;
+import com.google.common.base.Stopwatch;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import java.text.MessageFormat;
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 
 @RestController
 public class TrendingController {
@@ -25,6 +28,7 @@ public class TrendingController {
       @RequestParam(name = "since", required = false) String since,
       @RequestParam(name = "language", required = false) String language) {
 
+    Stopwatch watcher = Stopwatch.createStarted();
     if (StringUtils.isEmpty(since)) {
       //如果没有传获取的区间，默认拉取当天的Trending
       since = "daily";
@@ -38,6 +42,12 @@ public class TrendingController {
     result.setStatus(0);
     result.setData(trendings);
     result.setCount(trendings.size());
+    String elapsed = watcher.elapsed(TimeUnit.MILLISECONDS) + "ms";
+    result.setElapsed(elapsed);
+    result.setMessage(
+        MessageFormat.format(
+            "parse github trending(since={0},language={1}) successfully in {2}",
+            since, language, elapsed));
     return result;
   }
 }

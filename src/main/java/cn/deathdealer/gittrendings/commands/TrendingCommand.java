@@ -3,7 +3,6 @@ package cn.deathdealer.gittrendings.commands;
 import cn.deathdealer.gittrendings.entities.Repository;
 import cn.deathdealer.gittrendings.exceptions.TrendingException;
 import com.google.common.base.Splitter;
-import com.google.common.base.Stopwatch;
 import com.google.common.collect.Lists;
 import com.netflix.config.ConfigurationManager;
 import com.netflix.hystrix.HystrixCommandGroupKey;
@@ -15,15 +14,12 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.util.StringUtils;
 import rx.Observable;
-import rx.Subscriber;
 import rx.schedulers.Schedulers;
-
 import java.io.IOException;
 import java.text.NumberFormat;
 import java.text.ParseException;
 import java.util.Collections;
 import java.util.List;
-import java.util.concurrent.TimeUnit;
 
 /** Created by XiongChen on 2017/3/9. */
 public class TrendingCommand extends HystrixObservableCommand<List<Repository>> {
@@ -54,20 +50,17 @@ public class TrendingCommand extends HystrixObservableCommand<List<Repository>> 
   @Override
   protected Observable<List<Repository>> construct() {
     return Observable.create(
-            new Observable.OnSubscribe<List<Repository>>() {
-              @Override
-              public void call(Subscriber<? super List<Repository>> subscriber) {
-                if (!subscriber.isUnsubscribed()) {
-                  try {
-                    subscriber.onNext(getTrendingRepository());
-                    subscriber.onCompleted();
-                  } catch (TrendingException e) {
-                    logger.error("get trending failed:" + e.getMessage());
-                    subscriber.onError(e);
-                  }
-                }
-              }
-            })
+		    (Observable.OnSubscribe<List<Repository>>) subscriber -> {
+		      if (!subscriber.isUnsubscribed()) {
+		        try {
+		          subscriber.onNext(getTrendingRepository());
+		          subscriber.onCompleted();
+		        } catch (TrendingException e) {
+		          logger.error("get trending failed:" + e.getMessage());
+		          subscriber.onError(e);
+		        }
+		      }
+		    })
         .subscribeOn(Schedulers.immediate());
   }
 
@@ -78,7 +71,7 @@ public class TrendingCommand extends HystrixObservableCommand<List<Repository>> 
 
     List<Repository> repositoryList = Lists.newLinkedList();
     try {
-      Stopwatch watcher = Stopwatch.createStarted();
+      
       Document document = Jsoup.connect(trendingUrl).timeout(15000).get();
       Elements repositories = document.select("ol.repo-list li");
       if (repositories == null || repositories.size() == 0) {
@@ -153,8 +146,6 @@ public class TrendingCommand extends HystrixObservableCommand<List<Repository>> 
             repository.setDelta(delta);
             repositoryList.add(repository);
           });
-      logger.info(
-          "query and parsing trending in " + watcher.elapsed(TimeUnit.MILLISECONDS) + " ms");
     } catch (IOException e) {
       throw new TrendingException(e);
     }
