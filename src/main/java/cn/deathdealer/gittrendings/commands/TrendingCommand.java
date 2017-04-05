@@ -152,4 +152,9 @@ public class TrendingCommand extends HystrixObservableCommand<List<Repository>> 
 
     return repositoryList;
   }
+
+	@Override
+	protected Observable<List<Repository>> resumeWithFallback() {
+		return Observable.empty();
+	}
 }

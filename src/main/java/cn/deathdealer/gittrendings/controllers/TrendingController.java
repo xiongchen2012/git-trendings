@@ -17,10 +17,15 @@ import java.util.concurrent.TimeUnit;
 @RestController
 public class TrendingController {
 
-  @Autowired TrendingService trendingService;
+  private final TrendingService trendingService;
+
+  @Autowired
+  public TrendingController(TrendingService trendingService) {
+    this.trendingService = trendingService;
+  }
 
   @RequestMapping(
-    path = "/trendings",
+    path = "/trending",
     method = RequestMethod.GET,
     produces = "application/json; charset=UTF-8"
   )
@@ -38,16 +43,15 @@ public class TrendingController {
       language = "";
     }
     ResultVO<List<Repository>> result = new ResultVO<>();
-    List<Repository> trendings = trendingService.scrapeGithubTrendings(since, language);
+    List<Repository> trendingList = trendingService.scrapeGithubTrendings(since, language);
     result.setStatus(0);
-    result.setData(trendings);
-    result.setCount(trendings.size());
+    result.setData(trendingList);
+    result.setCount(trendingList.size());
     String elapsed = watcher.elapsed(TimeUnit.MILLISECONDS) + "ms";
     result.setElapsed(elapsed);
     result.setMessage(
         MessageFormat.format(
-            "parse github trending(since={0},language={1}) successfully.",
-            since, language));
+            "parse github trending(since={0},language={1}) successfully.", since, language));
     return result;
   }
 }
