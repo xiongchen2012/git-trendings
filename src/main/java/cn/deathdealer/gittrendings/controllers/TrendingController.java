@@ -23,7 +23,7 @@ public class TrendingController {
   }
 
   @RequestMapping(
-    path = "/trendings",
+    path = "/trending",
     method = RequestMethod.GET,
     produces = "application/json; charset=UTF-8"
   )
@@ -49,8 +49,7 @@ public class TrendingController {
     result.setElapsed(elapsed);
     result.setMessage(
         MessageFormat.format(
-            "parse github trending(since={0},language={1}) successfully.",
-            since, language));
+            "parse github trending(since={0},language={1}) successfully.", since, language));
     return result;
   }
 }
