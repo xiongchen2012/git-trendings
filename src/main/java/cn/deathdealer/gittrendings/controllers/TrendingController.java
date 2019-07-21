@@ -6,10 +6,8 @@ import cn.deathdealer.gittrendings.services.TrendingService;
 import com.google.common.base.Stopwatch;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.util.StringUtils;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+
 import java.text.MessageFormat;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
@@ -17,7 +15,12 @@ import java.util.concurrent.TimeUnit;
 @RestController
 public class TrendingController {
 
-  @Autowired TrendingService trendingService;
+  private final TrendingService trendingService;
+
+  @Autowired
+  public TrendingController(TrendingService trendingService) {
+    this.trendingService = trendingService;
+  }
 
   @RequestMapping(
     path = "/trendings",
@@ -38,10 +41,10 @@ public class TrendingController {
       language = "";
     }
     ResultVO<List<Repository>> result = new ResultVO<>();
-    List<Repository> trendings = trendingService.scrapeGithubTrendings(since, language);
+    List<Repository> trendingList = trendingService.scrapeGithubTrendings(since, language);
     result.setStatus(0);
-    result.setData(trendings);
-    result.setCount(trendings.size());
+    result.setData(trendingList);
+    result.setCount(trendingList.size());
     String elapsed = watcher.elapsed(TimeUnit.MILLISECONDS) + "ms";
     result.setElapsed(elapsed);
     result.setMessage(

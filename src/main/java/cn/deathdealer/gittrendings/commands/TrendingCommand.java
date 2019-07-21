@@ -73,7 +73,7 @@ public class TrendingCommand extends HystrixObservableCommand<List<Repository>> 
     try {
       
       Document document = Jsoup.connect(trendingUrl).timeout(15000).get();
-      Elements repositories = document.select("ol.repo-list li");
+      Elements repositories = document.select("article.Box-row");
       if (repositories == null || repositories.size() == 0) {
         return Collections.emptyList();
       }
@@ -81,7 +81,7 @@ public class TrendingCommand extends HystrixObservableCommand<List<Repository>> 
       repositories.forEach(
           repo -> {
             /* parse basic info */
-            Elements item = repo.select("h3 a");
+            Elements item = repo.select("h1 a");
             String title = item.text();
             String url = "https://github.com" + item.attr("href");
             String owner = "";
@@ -109,7 +109,7 @@ public class TrendingCommand extends HystrixObservableCommand<List<Repository>> 
             // String forksStr = repo.select("a.tooltipped[aria-label=Forks]").text();
 
             String strStars = repo.select("a.muted-link[href$=stargazers]").text();
-            String forksStr = repo.select("a.muted-link[href$=network]").text();
+            String forksStr = repo.select("a.muted-link[href$=network/members]").text();
             try {
               /* 2,017(string) -> 2017(number) */
               totalStars = NumberFormat.getInstance().parse(strStars).intValue();
@@ -125,13 +125,13 @@ public class TrendingCommand extends HystrixObservableCommand<List<Repository>> 
 
             /* parse contributor list */
             List<String> contributors = Lists.newArrayList();
-            Elements conItem = repo.select("a.no-underline img.avatar");
+            Elements conItem = repo.select("a.d-inline-block img.avatar");
             if (conItem != null && conItem.size() > 0) {
-              conItem.forEach(contributor -> contributors.add(contributor.attr("title")));
+              conItem.forEach(contributor -> contributors.add(contributor.attr("alt")));
             }
 
             /* parse delta */
-            String delta = repo.select("span.float-right").text();
+            String delta = repo.select("span.float-sm-right").text();
 
             /* create repository instance */
             Repository repository = new Repository();

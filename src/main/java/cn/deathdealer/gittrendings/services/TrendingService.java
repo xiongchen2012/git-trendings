@@ -119,6 +119,7 @@ public class TrendingService {
       urlBuilder.append("/").append(language);
     }
     urlBuilder.append("?since=").append(since);
+    logger.info("trending url = {}",urlBuilder.toString());
     return urlBuilder.toString();
   }
 }

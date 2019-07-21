@@ -7,6 +7,7 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.autoconfigure.web.HttpMessageConverters;
 import org.springframework.context.annotation.Bean;
+import org.springframework.http.converter.StringHttpMessageConverter;
 
 /**
  * Spring boot application,The entry of application.
@@ -26,6 +27,9 @@ public class Application {
     FastJsonConfig fastJsonConfig = new FastJsonConfig();
     fastJsonConfig.setSerializerFeatures(SerializerFeature.QuoteFieldNames);
     fastConverter.setFastJsonConfig(fastJsonConfig);
-    return new HttpMessageConverters(fastConverter);
+
+    StringHttpMessageConverter stringHttpMessageConverter =
+        new StringHttpMessageConverter();
+    return new HttpMessageConverters(stringHttpMessageConverter,fastConverter);
   }
 }
