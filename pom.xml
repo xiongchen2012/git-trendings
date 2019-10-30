@@ -14,7 +14,7 @@
         <jsoup.version>1.10.2</jsoup.version>
         <guava.version>21.0</guava.version>
         <lombok.version>1.16.14</lombok.version>
-        <fastjson.version>1.2.24</fastjson.version>
+        <fastjson.version>1.2.25</fastjson.version>
         <hystrix.version>1.5.9</hystrix.version>
         <quartz.version>2.2.3</quartz.version>
     </properties>
