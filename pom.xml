@@ -11,7 +11,7 @@
 
         <springboot.version>1.5.4.RELEASE</springboot.version>
         <spring.version>4.3.7.RELEASE</spring.version>
-        <jsoup.version>1.10.2</jsoup.version>
+        <jsoup.version>1.14.2</jsoup.version>
         <guava.version>21.0</guava.version>
         <lombok.version>1.16.14</lombok.version>
         <fastjson.version>1.2.24</fastjson.version>
